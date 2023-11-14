@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Side-by-Side Input Boxes</title>
+<style>
+  .splitter {
+		width: 90%;
+		height: 600px;
+		display: flex;
+		margin: auto;
+		margin-top: 100px;
+		border: 5px solid green;
+		padding: 4px;
+		padding-bottom: 8px;
+		border-radius: 15px;
+	}
+
+	#separator {
+		cursor: col-resize;
+		background-color: #aaa;
+		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='30'><path d='M2 0 v30 M5 0 v30 M8 0 v30' fill='none' stroke='black'/></svg>");
+		background-repeat: no-repeat;
+		background-position: center;
+		width: 0.50%;
+		margin-top: 125px;
+		height: 60%;
+		flex-grow: 0;
+        flex-shrink: 0;
+
+		/* Prevent the browser's built-in drag from interfering */
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+	
+	#container {
+		display: flex;
+		width: 100%;
+		height: 100%;	
+		margin: auto;
+		margin-bottom: 2px;
+	}
+
+	#first {
+		border-radius: 10px;
+		background-color: #dde;
+		width: 99.75%;
+		height: 100%;
+		min-width: 10px;
+		resize: none;	
+		margin: auto;
+		margin-bottom: 2px;
+	}
+
+	#second {	
+		border-radius: 10px;
+		background-color: #eee;
+		width: 99.75%;
+		height: 100%;
+		min-width: 10px;
+		resize: none;
+		margin: auto;
+		margin-bottom: 2px;
+	}
+	
+	.submit {
+		text-align: center;
+		padding: 50px;
+	}
+</style>
+</head>
+<body>
+	<div class="splitter">
+		<div id="container">
+			<textarea id="first" placeholder="Input 1"></textarea>
+		</div>
+		<div id="separator" ></div>
+		<div id="container" >
+			<textarea id="second" placeholder="Input 2"></textarea>
+		</div>
+	</div>
+	<div class="submit">
+		<button onclick="process()">Submit</button>
+	</div>
+<script>
+
+function process()
+{
+	document.getElementById("second").value = document.getElementById("first").value;
+}
+
+// A function is used for dragging and moving
+function dragElement(element, direction)
+{
+    var   md; // remember mouse down info
+    const first  = document.getElementById("first");
+    const second = document.getElementById("second");
+
+    element.onmousedown = onMouseDown;	
+	
+
+    function onMouseDown(e)
+    {
+        //console.log("mouse down: " + e.clientX);
+        md = {e,
+              offsetLeft:  element.offsetLeft,
+              offsetTop:   element.offsetTop,
+              firstWidth:  first.offsetWidth,
+              secondWidth: second.offsetWidth
+             };
+
+        document.onmousemove = onMouseMove;
+        document.onmouseup = () => {
+            //console.log("mouse up");
+            document.onmousemove = document.onmouseup = null;
+        }
+    }
+
+    function onMouseMove(e)
+    {
+        //console.log("mouse move: " + e.clientX);
+        var delta = {x: e.clientX - md.e.clientX,
+                     y: e.clientY - md.e.clientY};
+
+        if (direction === "H" ) // Horizontal
+        {
+            // Prevent negative-sized elements
+            delta.x = Math.min(Math.max(delta.x, -md.firstWidth),
+                       md.secondWidth);
+
+            element.style.left = md.offsetLeft + delta.x + "px";
+            first.style.width = (md.firstWidth + delta.x) + "px";
+            second.style.width = (md.secondWidth - delta.x) + "px";
+        }
+    }
+}
+
+
+dragElement( document.getElementById("separator"), "H" );
+
+</script>
+</body>
+</html>
