@@ -9,7 +9,7 @@ pipeline {
     stages {
 	stage('Deploy to GCP') {
             steps {
-                sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
+                sh 'gcloud auth activate-service-account --key-file ${env.GOOGLE_APPLICATION_CREDENTIALS}'
                 sh 'gcloud compute instances list'
             }
         }
