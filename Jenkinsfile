@@ -2,12 +2,12 @@ pipeline {
     agent any
     
     environment {
-        GOOGLE_APPLICATION_CREDENTIALS = credentials('0cbe62e8-4221-48f0-9f2b-cb9a03a0d9dc')
-		CI = 'true'
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('ultra-thought-397322')
+	CI = 'true'
     }		
 
     stages {
-		stage('Deploy to GCP') {
+	stage('Deploy to GCP') {
             steps {
                 sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
                 sh 'gcloud compute instances list'
