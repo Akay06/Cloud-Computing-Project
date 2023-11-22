@@ -7,6 +7,13 @@ pipeline {
     }		
 
     stages {
+	stage('test') {
+		steps {
+			sh '''
+   				gcloud version
+       			'''
+		}
+	}
 	stage('Deploy to GCP') {
             steps {
                 withCredentials([googleComputeServiceAccount(credentialsId: '$GOOGLE_APPLICATION_CREDENTIALS', accountEmail: '', scopes: [''])]) {
