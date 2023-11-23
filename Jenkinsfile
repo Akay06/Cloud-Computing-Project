@@ -28,7 +28,7 @@ pipeline {
 			steps {
 				withCredentials([file(credentialsId: 'gcloud', variable: 'GCLOUD_CREDS')]){
 					sh '''
-						gcloud compute ssh --zone "us-central1-a" "in-class-lab3-application" --project "ultra-thought-397322" --command "git clone https://github.com/Akay06/Cloud-Computing-Project/ && cd Cloud-Computing-Project/ && nohup python3 app.py </dev/null >nohup.out 2>nohup.err &"
+						gcloud compute ssh --zone "us-central1-a" "in-class-lab3-application" --project "ultra-thought-397322" --command "git clone https://github.com/Akay06/Cloud-Computing-Project/ && cd Cloud-Computing-Project/ && nohup python3 app.py </dev/null >nohup.out 2>nohup.err & echo Done"
 					'''
 				}
 			}
